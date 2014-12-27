@@ -15,7 +15,7 @@ START:
     MOV r1, 10
 BLINK:
     MOV r2, 7<<22
-    MOV r3, GPIO1 | GPIO_SETDATAOUT
+    MOV r3, GPIO1 | GPIO_CLEARDATAOUT
     SBBO r2, r3, 0, 4
 
     MOV r0, 0x00a00000
@@ -23,8 +23,26 @@ DELAY:
     SUB r0, r0, 1
     QBNE DELAY, r0, 0
 
-    MOV r2, 7<<22
-    MOV r3, GPIO1 | GPIO_CLEARDATAOUT
+    MOV r2, 1<<22
+    MOV r3, GPIO1 | GPIO_SETDATAOUT
+    SBBO r2, r3, 0, 4
+
+    MOV r0, 0x00a00000
+DELAYY:
+    SUB r0, r0, 1
+    QBNE DELAYY, r0, 0
+
+    LSL r2, r2, 1
+    MOV r3, GPIO1 | GPIO_SETDATAOUT
+    SBBO r2, r3, 0, 4
+
+    MOV r0, 0x00a00000
+DELAYYY:
+    SUB r0, r0, 1
+    QBNE DELAYYY, r0, 0
+
+    LSL r2, r2, 1
+    MOV r3, GPIO1 | GPIO_SETDATAOUT
     SBBO r2, r3, 0, 4
 
     MOV r0, 0x00a00000
@@ -33,6 +51,12 @@ DELAY2:
     QBNE DELAY2, r0, 0
     SUB r1, r1, 1
     QBNE BLINK, r1, 0
+    MOV r2, 7<<22
+    MOV r3, GPIO1 | GPIO_CLEARDATAOUT
+    SBBO r2, r3, 0, 4
+
+
+
 
     MOV R31.b0, PRU0_ARM_INTERRUPT+16   // Send notification to Host for program completion
 HALT
